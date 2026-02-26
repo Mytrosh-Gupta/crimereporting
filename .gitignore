@@ -1,0 +1,26 @@
+# Environment variables
+.env
+.env.*
+
+# Dependencies
+node_modules/
+
+# Runtime uploads
+server/uploads/*
+!server/uploads/.gitkeep
+
+# Build output
+client/dist/
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/*
+!.vscode/extensions.json
+.idea/
