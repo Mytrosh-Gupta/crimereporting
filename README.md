@@ -153,7 +153,7 @@ Create a `.env` file inside the `server/` directory with the following variables
 
 ```env
 PORT=5000
-MONGO_URI=mongodb://localhost:27017/crime_reporting_db
+MONGO_URI=mongodb+srv://<username>:<password>@<cluster-url>/crime_reporting_db?retryWrites=true&w=majority
 JWT_SECRET=your_super_secret_jwt_key
 ```
 

@@ -149,13 +149,13 @@ const AdminComplaintDetails = () => {
                         <h3>Evidence</h3>
                         {/\.(jpg|jpeg|png|gif|webp)$/i.test(complaint.evidenceFile) ? (
                             <img
-                                src={`http://localhost:5000/uploads/${complaint.evidenceFile}`}
+                                src={`https://onlinecrimereportingsystem.onrender.com/uploads/${complaint.evidenceFile}`}
                                 alt="Evidence"
                                 className="evidence-image"
                             />
                         ) : (
                             <a
-                                href={`http://localhost:5000/uploads/${complaint.evidenceFile}`}
+                                href={`https://onlinecrimereportingsystem.onrender.com/uploads/${complaint.evidenceFile}`}
                                 target="_blank"
                                 rel="noreferrer"
                                 className="btn btn-outline"

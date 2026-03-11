@@ -24,7 +24,7 @@ if (!fs.existsSync(uploadsDir)) {
 // Middleware
 app.use(
     cors({
-        origin: 'http://localhost:5173',
+        origin: ['http://localhost:5173', 'https://online-crimereporting-system.vercel.app'],
         credentials: true,
     })
 );
