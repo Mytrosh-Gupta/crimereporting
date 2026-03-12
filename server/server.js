@@ -26,8 +26,6 @@ if (!fs.existsSync(uploadsDir)) {
 app.use(cors({
     origin: [
         "http://localhost:5173",
-        "https://online-crimereporting-system.vercel.app",
-        "https://online-crimereporting-system-mytrosh-guptas-projects.vercel.app",
         "https://crimereporting-six.vercel.app",
     ],
     credentials: true
