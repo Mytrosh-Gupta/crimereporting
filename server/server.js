@@ -22,12 +22,15 @@ if (!fs.existsSync(uploadsDir)) {
 }
 
 // Middleware
-app.use(
-    cors({
-        origin: ['http://localhost:5173', 'https://online-crimereporting-system.vercel.app'],
-        credentials: true,
-    })
-);
+
+app.use(cors({
+    origin: [
+        "http://localhost:5173",
+        "https://online-crimereporting-system.vercel.app",
+        "https://online-crimereporting-system-mytrosh-guptas-projects.vercel.app"
+    ],
+    credentials: true
+}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
