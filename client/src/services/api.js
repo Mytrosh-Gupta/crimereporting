@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-    baseURL: 'https://onlinecrimereportingsystem.onrender.com/api',
+    baseURL: 'https://crimereporting-uqln.onrender.com/api',
 });
 
 // Attach JWT token to every request
