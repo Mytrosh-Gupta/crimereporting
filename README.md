@@ -24,13 +24,15 @@ A full-stack **MERN** (MongoDB, Express.js, React.js, Node.js) web application t
 
 ### 👤 User Features
 - **Register & Login** with secure JWT-based authentication
+- **User Profile** – view and edit personal info, upload avatar, and change password
 - **Report a Crime** with title, description, category, location, date of incident, and optional evidence upload
 - **Anonymous Reporting** – submit complaints without revealing identity
-- **My Complaints** – view and track the status of all submitted complaints
+- **My Complaints & Stats** – track status and view personal complaint statistics
 - **Complaint Details** – see full information and admin remarks per complaint
+- **Email Notifications** – receive automated email updates when complaint status changes
 
 ### 🛡️ Admin Features
-- **Admin Dashboard** – overview with complaint statistics
+- **Admin Analytics Dashboard** – interactive charts (Pie, Bar, Line) showing complaint statistics, trends, and distributions
 - **View All Complaints** – paginated list of all submitted complaints
 - **Complaint Management** – update complaint status (`Pending` → `Under Investigation` → `Resolved`)
 - **Add Admin Remarks** – attach notes or feedback to each complaint
@@ -51,7 +53,9 @@ A full-stack **MERN** (MongoDB, Express.js, React.js, Node.js) web application t
 | Backend    | Node.js, Express.js                             |
 | Database   | MongoDB, Mongoose                               |
 | Auth       | JSON Web Tokens (JWT), bcryptjs                 |
-| File Upload| Multer (evidence files, max 10 MB)              |
+| Emails     | Nodemailer (automated status updates)           |
+| File Upload| Multer (evidence files & avatars, max 10 MB)    |
+| Charts     | Recharts (Admin analytics dashboard)            |
 | Styling    | Vanilla CSS (custom design system)              |
 
 ---
@@ -155,6 +159,10 @@ Create a `.env` file inside the `server/` directory with the following variables
 PORT=5000
 MONGO_URI=mongodb+srv://<username>:<password>@<cluster-url>/crime_reporting_db?retryWrites=true&w=majority
 JWT_SECRET=your_super_secret_jwt_key
+
+# Needed for Email Notifications
+EMAIL_USER=your-email@gmail.com
+EMAIL_PASS=your-16-char-app-password
 ```
 
 > ⚠️ **Never commit your `.env` file to version control.** Make sure it is listed in `.gitignore`.
@@ -183,22 +191,26 @@ The React app will be available at `http://localhost:5173`.
 
 ## 📡 API Endpoints
 
-### Auth Routes — `/api/auth`
+### Auth / Profile Routes — `/api/auth`
 
-| Method | Endpoint    | Description              | Auth Required |
-|--------|-------------|--------------------------|---------------|
-| POST   | `/register` | Register a new user      | No            |
-| POST   | `/login`    | Login and receive JWT    | No            |
+| Method | Endpoint             | Description                       | Auth Required |
+|--------|----------------------|-----------------------------------|---------------|
+| POST   | `/register`          | Register a new user               | No            |
+| POST   | `/login`             | Login and receive JWT             | No            |
+| GET    | `/profile`           | Get logged-in user profile        | User          |
+| PUT    | `/profile`           | Update profile / change password  | User          |
+| PUT    | `/profile/picture`   | Upload profile avatar             | User          |
 
 ### Complaint Routes — `/api/complaints`
 
-| Method | Endpoint          | Description                          | Auth Required |
-|--------|-------------------|--------------------------------------|---------------|
-| POST   | `/`               | Submit a new complaint               | User          |
-| GET    | `/my`             | Get current user's complaints        | User          |
-| GET    | `/:id`            | Get a single complaint by ID         | User          |
-| GET    | `/admin/all`      | Get all complaints (admin only)      | Admin         |
-| PUT    | `/admin/:id`      | Update status & remarks (admin only) | Admin         |
+| Method | Endpoint             | Description                          | Auth Required |
+|--------|----------------------|--------------------------------------|---------------|
+| POST   | `/`                  | Submit a new complaint               | User          |
+| GET    | `/my`                | Get current user's complaints        | User          |
+| GET    | `/analytics`         | Get charts aggregation data          | Admin         |
+| GET    | `/:id`               | Get a single complaint by ID         | User          |
+| GET    | `/admin/all`         | Get all complaints (admin only)      | Admin         |
+| PUT    | `/admin/:id`         | Update status & remarks (admin only) | Admin         |
 
 ---
 
