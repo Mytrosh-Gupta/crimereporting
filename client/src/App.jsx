@@ -16,10 +16,14 @@ import ReportCrime from './pages/ReportCrime';
 import MyComplaints from './pages/MyComplaints';
 import ComplaintDetails from './pages/ComplaintDetails';
 
+// User profile
+import UserProfile from './pages/UserProfile';
+
 // Admin pages
 import AdminDashboard from './pages/admin/AdminDashboard';
 import AdminComplaints from './pages/admin/AdminComplaints';
 import AdminComplaintDetails from './pages/admin/AdminComplaintDetails';
+import AdminAnalytics from './pages/admin/AdminAnalytics';
 
 function App() {
   return (
@@ -38,11 +42,13 @@ function App() {
             <Route path="/report" element={<ProtectedRoute><ReportCrime /></ProtectedRoute>} />
             <Route path="/my-complaints" element={<ProtectedRoute><MyComplaints /></ProtectedRoute>} />
             <Route path="/complaints/:id" element={<ProtectedRoute><ComplaintDetails /></ProtectedRoute>} />
+            <Route path="/profile" element={<ProtectedRoute><UserProfile /></ProtectedRoute>} />
 
             {/* Admin Protected */}
             <Route path="/admin" element={<AdminRoute><AdminDashboard /></AdminRoute>} />
             <Route path="/admin/complaints" element={<AdminRoute><AdminComplaints /></AdminRoute>} />
             <Route path="/admin/complaints/:id" element={<AdminRoute><AdminComplaintDetails /></AdminRoute>} />
+            <Route path="/admin/analytics" element={<AdminRoute><AdminAnalytics /></AdminRoute>} />
 
             {/* Fallback */}
             <Route path="*" element={<Navigate to="/" replace />} />

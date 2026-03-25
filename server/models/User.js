@@ -30,6 +30,15 @@ const userSchema = new mongoose.Schema(
             enum: ['user', 'admin'],
             default: 'user',
         },
+        address: {
+            type: String,
+            default: '',
+            trim: true,
+        },
+        profilePicture: {
+            type: String,
+            default: null,
+        },
     },
     { timestamps: true }
 );

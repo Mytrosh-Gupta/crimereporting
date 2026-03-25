@@ -27,6 +27,7 @@ const Navbar = () => {
                     <>
                         <Link to="/admin" className="nav-link">Dashboard</Link>
                         <Link to="/admin/complaints" className="nav-link">Complaints</Link>
+                        <Link to="/admin/analytics" className="nav-link">Analytics</Link>
                         <button onClick={handleLogout} className="nav-link btn-nav btn-danger">Logout</button>
                     </>
                 ) : (
@@ -34,6 +35,7 @@ const Navbar = () => {
                         <Link to="/dashboard" className="nav-link">Dashboard</Link>
                         <Link to="/report" className="nav-link">Report Crime</Link>
                         <Link to="/my-complaints" className="nav-link">My Complaints</Link>
+                        <Link to="/profile" className="nav-link">Profile</Link>
                         <button onClick={handleLogout} className="nav-link btn-nav btn-danger">Logout</button>
                     </>
                 )}

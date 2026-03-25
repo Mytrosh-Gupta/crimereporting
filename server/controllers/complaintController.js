@@ -1,4 +1,6 @@
 const Complaint = require('../models/Complaint');
+const User = require('../models/User');
+const { sendStatusUpdateEmail } = require('../utils/emailService');
 
 // @desc    Create a new complaint
 // @route   POST /api/complaints
@@ -62,7 +64,6 @@ const getComplaintById = async (req, res) => {
             return res.status(404).json({ message: 'Complaint not found' });
         }
 
-        // Users can only fetch their own complaints; admins can fetch any
         if (
             req.user.role !== 'admin' &&
             complaint.userId._id.toString() !== req.user._id.toString()
@@ -102,7 +103,7 @@ const updateComplaintStatus = async (req, res) => {
             return res.status(400).json({ message: 'Invalid status value' });
         }
 
-        const complaint = await Complaint.findById(req.params.id);
+        const complaint = await Complaint.findById(req.params.id).populate('userId', 'name email');
         if (!complaint) {
             return res.status(404).json({ message: 'Complaint not found' });
         }
@@ -113,6 +114,23 @@ const updateComplaintStatus = async (req, res) => {
         }
 
         const updated = await complaint.save();
+
+        // Send email notification (only for non-anonymous complaints)
+        if (!complaint.isAnonymous && complaint.userId && complaint.userId.email) {
+            try {
+                await sendStatusUpdateEmail(
+                    complaint.userId.email,
+                    complaint.userId.name,
+                    complaint.title,
+                    status,
+                    adminRemarks || ''
+                );
+            } catch (emailErr) {
+                console.error('Email notification failed:', emailErr.message);
+                // Don't fail the request just because email failed
+            }
+        }
+
         res.json({ message: 'Complaint updated successfully', complaint: updated });
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -136,6 +154,62 @@ const deleteComplaint = async (req, res) => {
     }
 };
 
+// @desc    Get analytics data (admin)
+// @route   GET /api/complaints/analytics
+// @access  Private (Admin)
+const getAnalytics = async (req, res) => {
+    try {
+        // Totals by status
+        const byStatus = await Complaint.aggregate([
+            { $group: { _id: '$status', count: { $sum: 1 } } },
+        ]);
+
+        // Totals by category
+        const byCategory = await Complaint.aggregate([
+            { $group: { _id: '$category', count: { $sum: 1 } } },
+        ]);
+
+        // Monthly trend (last 6 months)
+        const sixMonthsAgo = new Date();
+        sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 5);
+        sixMonthsAgo.setDate(1);
+        sixMonthsAgo.setHours(0, 0, 0, 0);
+
+        const byMonth = await Complaint.aggregate([
+            { $match: { createdAt: { $gte: sixMonthsAgo } } },
+            {
+                $group: {
+                    _id: {
+                        year: { $year: '$createdAt' },
+                        month: { $month: '$createdAt' },
+                    },
+                    count: { $sum: 1 },
+                },
+            },
+            { $sort: { '_id.year': 1, '_id.month': 1 } },
+        ]);
+
+        const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+                            'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+        const formattedByMonth = byMonth.map((item) => ({
+            month: `${monthNames[item._id.month - 1]} ${item._id.year}`,
+            count: item.count,
+        }));
+
+        const total = await Complaint.countDocuments();
+
+        res.json({
+            total,
+            byStatus: byStatus.map((s) => ({ name: s._id, value: s.count })),
+            byCategory: byCategory.map((c) => ({ name: c._id, value: c.count })),
+            byMonth: formattedByMonth,
+        });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
 module.exports = {
     createComplaint,
     getMyComplaints,
@@ -143,4 +217,5 @@ module.exports = {
     getAllComplaints,
     updateComplaintStatus,
     deleteComplaint,
+    getAnalytics,
 };
