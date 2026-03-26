@@ -127,11 +127,14 @@ const updateComplaintStatus = async (req, res) => {
                 );
             } catch (emailErr) {
                 console.error('Email notification failed:', emailErr.message);
-                // Don't fail the request just because email failed
+                // Temporarily fail the request to see the exact Nodemailer error on the frontend
+                return res.status(500).json({ 
+                    message: 'Status updated, but email failed. Error: ' + emailErr.message 
+                });
             }
         }
 
-        res.json({ message: 'Complaint updated successfully', complaint: updated });
+        res.json({ message: 'Complaint updated successfully and Email Sent', complaint: updated });
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
