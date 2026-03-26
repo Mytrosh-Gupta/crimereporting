@@ -1,11 +1,18 @@
 const nodemailer = require('nodemailer');
 
 const transporter = nodemailer.createTransport({
-    service: 'gmail',
+    host: 'smtp.gmail.com',
+    port: 465,
+    secure: true,
     auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS,
     },
+    // Force IPv4 – Render has limited outbound IPv6 support
+    // which causes ENETUNREACH 2607:f8b0:400e...
+    tls: {
+        rejectUnauthorized: false
+    }
 });
 
 const statusColors = {
