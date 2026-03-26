@@ -1,7 +1,11 @@
 import axios from 'axios';
 
+const API_URL = import.meta.env.MODE === 'development' 
+    ? 'http://localhost:5000/api' 
+    : 'https://crimereporting-uqln.onrender.com/api';
+
 const api = axios.create({
-    baseURL: 'https://crimereporting-uqln.onrender.com/api',
+    baseURL: API_URL,
 });
 
 // Attach JWT token to every request
