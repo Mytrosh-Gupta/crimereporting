@@ -15,7 +15,7 @@ const Navbar = () => {
         <nav className="navbar">
             <div className="navbar-brand">
                 <span className="navbar-icon">🚔</span>
-                <Link to="/" className="navbar-title">CrimeReport</Link>
+                <Link to={user ? (user.role === 'admin' ? '/admin' : '/dashboard') : '/'} className="navbar-title">CrimeReport</Link>
             </div>
             <div className="navbar-links">
                 {!user ? (
