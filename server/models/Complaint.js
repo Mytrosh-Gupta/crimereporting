@@ -19,7 +19,16 @@ const complaintSchema = new mongoose.Schema(
         category: {
             type: String,
             required: [true, 'Category is required'],
-            enum: ['Theft', 'Assault', 'Cybercrime', 'Harassment', 'Other'],
+            enum: ['Theft', 'Cyber Fraud', 'Harassment', 'Missing Person', 'Assault', 'Other'],
+        },
+        summary: {
+            type: String,
+            default: '',
+        },
+        priority: {
+            type: String,
+            enum: ['High', 'Medium', 'Low'],
+            default: 'Medium',
         },
         location: {
             type: String,

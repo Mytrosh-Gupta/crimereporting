@@ -102,6 +102,14 @@ const AdminComplaintDetails = () => {
                         <span className="detail-value">{complaint.category}</span>
                     </div>
                     <div className="detail-item">
+                        <span className="detail-label">Priority</span>
+                        <span className="detail-value">
+                            <span className={complaint.priority === 'High' ? 'badge badge-danger' : complaint.priority === 'Medium' ? 'badge badge-warning' : 'badge badge-info'}>
+                                {complaint.priority || 'Not Set'}
+                            </span>
+                        </span>
+                    </div>
+                    <div className="detail-item">
                         <span className="detail-label">Location</span>
                         <span className="detail-value">{complaint.location}</span>
                     </div>
@@ -139,8 +147,15 @@ const AdminComplaintDetails = () => {
                     )}
                 </div>
 
+                {complaint.summary && (
+                    <div className="detail-section">
+                        <h3>🤖 AI Summary</h3>
+                        <p className="detail-description" style={{fontStyle: 'italic'}}>{complaint.summary}</p>
+                    </div>
+                )}
+
                 <div className="detail-section">
-                    <h3>Description</h3>
+                    <h3>Full Description</h3>
                     <p className="detail-description">{complaint.description}</p>
                 </div>
 

@@ -25,7 +25,7 @@ A full-stack **MERN** (MongoDB, Express.js, React.js, Node.js) web application t
 ### 👤 User Features
 - **Register & Login** with secure JWT-based authentication
 - **User Profile** – view and edit personal info, upload avatar, and change password
-- **Report a Crime** with title, description, category, location, date of incident, and optional evidence upload
+- **Report a Crime** with title, description, location, date of incident, and optional evidence upload
 - **Anonymous Reporting** – submit complaints without revealing identity
 - **My Complaints & Stats** – track status and view personal complaint statistics
 - **Complaint Details** – see full information and admin remarks per complaint
@@ -36,6 +36,11 @@ A full-stack **MERN** (MongoDB, Express.js, React.js, Node.js) web application t
 - **View All Complaints** – paginated list of all submitted complaints
 - **Complaint Management** – update complaint status (`Pending` → `Under Investigation` → `Resolved`)
 - **Add Admin Remarks** – attach notes or feedback to each complaint
+
+### 🤖 AI Integration (Gemini)
+- **Smart Categorization** – dynamically assigns the most fitting category based on the description using Gemini AI.
+- **Auto-Summarization** – generates a concise 1-sentence summary of long incident descriptions for quick reading.
+- **Priority Detection** – auto-flags complaints as High, Medium, or Low priority based on the severity of the crime.
 
 ### 🔒 Security
 - Password hashing with **bcryptjs**
@@ -163,6 +168,9 @@ JWT_SECRET=your_super_secret_jwt_key
 # Needed for Email Notifications
 EMAIL_USER=your-email@gmail.com
 EMAIL_PASS=your-16-char-app-password
+
+# Needed for AI Feature
+GEMINI_API_KEY=your_gemini_api_key_here
 ```
 
 > ⚠️ **Never commit your `.env` file to version control.** Make sure it is listed in `.gitignore`.
@@ -234,13 +242,14 @@ The React app will be available at `http://localhost:5173`.
 
 ## 📌 Complaint Categories
 
-| Category    | Description                           |
-|-------------|---------------------------------------|
-| Theft       | Robbery, burglary, pickpocketing      |
-| Assault     | Physical violence or threats          |
-| Cybercrime  | Hacking, fraud, identity theft        |
-| Harassment  | Stalking, bullying, workplace issues  |
-| Other       | Any crime not in the above categories |
+| Category        | Description                           |
+|-----------------|---------------------------------------|
+| Theft           | Robbery, burglary, pickpocketing      |
+| Assault         | Physical violence or threats          |
+| Cyber Fraud     | Hacking, financial fraud              |
+| Harassment      | Stalking, bullying, workplace issues  |
+| Missing Person  | Reporting someone who is missing      |
+| Other           | Any crime not in the above categories |
 
 ---
 

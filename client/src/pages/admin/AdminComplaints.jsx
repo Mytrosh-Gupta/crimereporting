@@ -4,6 +4,8 @@ import ComplaintCard from '../../components/ComplaintCard';
 import Loader from '../../components/Loader';
 
 const STATUSES = ['All', 'Pending', 'Under Investigation', 'Resolved'];
+const CATEGORIES = ['All', 'Theft', 'Cyber Fraud', 'Harassment', 'Missing Person', 'Assault', 'Other'];
+const PRIORITIES = ['All', 'High', 'Medium', 'Low'];
 
 const AdminComplaints = () => {
     const [complaints, setComplaints] = useState([]);
@@ -11,6 +13,8 @@ const AdminComplaints = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
     const [statusFilter, setStatusFilter] = useState('All');
+    const [categoryFilter, setCategoryFilter] = useState('All');
+    const [priorityFilter, setPriorityFilter] = useState('All');
     const [deleteId, setDeleteId] = useState(null);
 
     const fetchComplaints = async () => {
@@ -29,12 +33,12 @@ const AdminComplaints = () => {
     useEffect(() => { fetchComplaints(); }, []);
 
     useEffect(() => {
-        if (statusFilter === 'All') {
-            setFiltered(complaints);
-        } else {
-            setFiltered(complaints.filter((c) => c.status === statusFilter));
-        }
-    }, [statusFilter, complaints]);
+        let result = complaints;
+        if (statusFilter !== 'All') result = result.filter((c) => c.status === statusFilter);
+        if (categoryFilter !== 'All') result = result.filter((c) => c.category === categoryFilter);
+        if (priorityFilter !== 'All') result = result.filter((c) => c.priority === priorityFilter);
+        setFiltered(result);
+    }, [statusFilter, categoryFilter, priorityFilter, complaints]);
 
     const handleDelete = async (id) => {
         if (!window.confirm('Are you sure you want to delete this complaint?')) return;
@@ -57,15 +61,27 @@ const AdminComplaints = () => {
                     <p className="text-muted">{filtered.length} complaint(s) shown</p>
                 </div>
                 <div className="filter-group">
-                    {STATUSES.map((s) => (
-                        <button
-                            key={s}
-                            className={`filter-btn ${statusFilter === s ? 'active' : ''}`}
-                            onClick={() => setStatusFilter(s)}
-                        >
-                            {s}
-                        </button>
-                    ))}
+                    <select 
+                        value={statusFilter} 
+                        onChange={(e) => setStatusFilter(e.target.value)}
+                        className="filter-select"
+                    >
+                        {STATUSES.map(s => <option key={s} value={s}>Status: {s}</option>)}
+                    </select>
+                    <select 
+                        value={categoryFilter} 
+                        onChange={(e) => setCategoryFilter(e.target.value)}
+                        className="filter-select"
+                    >
+                        {CATEGORIES.map(c => <option key={c} value={c}>Category: {c}</option>)}
+                    </select>
+                    <select 
+                        value={priorityFilter} 
+                        onChange={(e) => setPriorityFilter(e.target.value)}
+                        className="filter-select"
+                    >
+                        {PRIORITIES.map(p => <option key={p} value={p}>Priority: {p}</option>)}
+                    </select>
                 </div>
             </div>
 

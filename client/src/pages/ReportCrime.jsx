@@ -2,14 +2,11 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { submitComplaint } from '../services/complaintService';
 
-const CATEGORIES = ['Theft', 'Assault', 'Cybercrime', 'Harassment', 'Other'];
-
 const ReportCrime = () => {
     const navigate = useNavigate();
     const [formData, setFormData] = useState({
         title: '',
         description: '',
-        category: '',
         location: '',
         dateOfIncident: '',
         isAnonymous: false,
@@ -32,10 +29,6 @@ const ReportCrime = () => {
         e.preventDefault();
         setError('');
         setSuccess('');
-
-        if (!formData.category) {
-            return setError('Please select a category');
-        }
 
         setLoading(true);
         try {
@@ -78,15 +71,6 @@ const ReportCrime = () => {
                     </div>
 
                     <div className="form-row">
-                        <div className="form-group">
-                            <label>Category *</label>
-                            <select name="category" value={formData.category} onChange={handleChange} required>
-                                <option value="">Select a category</option>
-                                {CATEGORIES.map((cat) => (
-                                    <option key={cat} value={cat}>{cat}</option>
-                                ))}
-                            </select>
-                        </div>
                         <div className="form-group">
                             <label>Date of Incident *</label>
                             <input

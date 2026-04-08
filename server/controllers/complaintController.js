@@ -1,25 +1,30 @@
 const Complaint = require('../models/Complaint');
 const User = require('../models/User');
 const { sendStatusUpdateEmail } = require('../utils/emailService');
+const { analyzeComplaint } = require('../utils/aiService');
 
 // @desc    Create a new complaint
 // @route   POST /api/complaints
 // @access  Private (User)
 const createComplaint = async (req, res) => {
     try {
-        const { title, description, category, location, dateOfIncident, isAnonymous } = req.body;
+        const { title, description, location, dateOfIncident, isAnonymous } = req.body;
 
-        if (!title || !description || !category || !location || !dateOfIncident) {
+        if (!title || !description || !location || !dateOfIncident) {
             return res
                 .status(400)
                 .json({ message: 'All required fields must be filled' });
         }
 
+        const aiData = await analyzeComplaint({ title, description, location });
+
         const complaint = await Complaint.create({
             userId: req.user._id,
             title,
             description,
-            category,
+            category: aiData.category,
+            summary: aiData.summary,
+            priority: aiData.priority,
             location,
             dateOfIncident,
             isAnonymous: isAnonymous === 'true' || isAnonymous === true,
